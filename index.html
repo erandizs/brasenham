@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="style.css" rel="stylesheet">
+    </head>
+    <body>
+        <canvas id="canvas" width="500" height="300"></canvas>
+        <script>
+            
+          var canvas = document.getElementById('canvas');
+          var contexto = canvas.getContext('2d');
+
+          // coordenadas del mouse
+          var startX, startY, endX, endY;
+
+          // agarrar las coordenadas del mouse cuqando hace clic
+          canvas.addEventListener('mousedown', function(event) {
+              startX = event.clientX - canvas.getBoundingClientRect().left; // x
+              startY = event.clientY - canvas.getBoundingClientRect().top;  // y
+          });
+
+          // cordenadas al soltar el mouse
+          canvas.addEventListener('mouseup', function(event) {
+              endX = event.clientX - canvas.getBoundingClientRect().left; // x
+              endY = event.clientY - canvas.getBoundingClientRect().top;   // y
+              
+              
+              dibujarLinea(startX,startY,endX,endY);
+          });
+
+            function dibujarLinea(x0, y0, x1, y1) {
+                // Calcular las diferencias en las coordenadas x y y
+                let dx = x1 - x0;
+                let dy = y1 - y0;
+
+                // Determinar la dirección en x y en y
+                let sx = (dx > 0) ? 1 : (dx < 0) ? -1 : 0; // 1 si dx es positivo, -1 si dx es negativo, 0 si es cero
+                let sy = (dy > 0) ? 1 : (dy < 0) ? -1 : 0; // 1 si dy es positivo, -1 si dy es negativo, 0 si es cero
+
+                dx = Math.abs(dx); // Tomar el valor absoluto de dx
+                dy = Math.abs(dy); // Tomar el valor absoluto de dy
+                
+                // Calcular el error inicial
+                let err = dx - dy;
+
+                // Bucle principal del algoritmo de Bresenham
+                while (true) {
+                    // Dibujar el píxel en la posición actual (x0, y0)
+                    drawPixel(x0, y0, [0, 0, 0]);
+
+                    // Si alcanzamos el punto final, salir del bucle
+                    if (x0 === x1 && y0 === y1) break;
+
+                    // Calcular el doble del error
+                    let e2 = 2 * err;
+
+                    // Actualizar la posición según la dirección que tengamos que mover
+                    if (e2 > -dy) {
+                        err -= dy;
+                        x0 += sx;
+                    }
+                    if (e2 < dx) {
+                        err += dx;
+                        y0 += sy;
+                    }
+                }
+            }
+
+            function drawPixel(x, y, color) {
+                 //  datos de píxeles del canvas
+                var imageData = contexto.createImageData(1, 1);
+                var data = imageData.data;
+
+                //color del píxel
+                data[0] = color[0];   // rojo
+                data[1] = color[1];   // verde
+                data[2] = color[2];   // azul
+                data[3] = 255;        // opacidad
+
+                // dibuja pixel
+                contexto.putImageData(imageData, x, y);
+            }
+        </script>
+    </body>
+</html>
