@@ -32,32 +32,34 @@
           });
 
             function dibujarLinea(x0, y0, x1, y1) {
-                // Calcular las diferencias en las coordenadas x y y
+                // diferencia entre x y y
                 let dx = x1 - x0;
                 let dy = y1 - y0;
 
-                // Determinar la dirección en x y en y
-                let sx = (dx > 0) ? 1 : (dx < 0) ? -1 : 0; // 1 si dx es positivo, -1 si dx es negativo, 0 si es cero
-                let sy = (dy > 0) ? 1 : (dy < 0) ? -1 : 0; // 1 si dy es positivo, -1 si dy es negativo, 0 si es cero
+                //direccion en x y y
+                let sx = (dx > 0) ? 1 : (dx < 0) ? -1 : 0; // 1 positivo, -1  negativo, 0 si es cero
+                let sy = (dy > 0) ? 1 : (dy < 0) ? -1 : 0;
 
-                dx = Math.abs(dx); // Tomar el valor absoluto de dx
-                dy = Math.abs(dy); // Tomar el valor absoluto de dy
+                dx = Math.abs(dx); // valor absoluto
+                dy = Math.abs(dy);
                 
-                // Calcular el error inicial
+                // el error es la dferencia del valor calculado y el que se quiere
+                //en y
                 let err = dx - dy;
 
-                // Bucle principal del algoritmo de Bresenham
+                
                 while (true) {
-                    // Dibujar el píxel en la posición actual (x0, y0)
+                    //  píxel en la posición actual le mandio el color
                     drawPixel(x0, y0, [0, 0, 0]);
 
-                    // Si alcanzamos el punto final, salir del bucle
+                    // se termina si son iguiales
                     if (x0 === x1 && y0 === y1) break;
 
-                    // Calcular el doble del error
-                    let e2 = 2 * err;
+                    
+                    let e2 = 2 * err;//se calcula para ver cuando cambiar a x o y
+                    
 
-                    // Actualizar la posición según la dirección que tengamos que mover
+                    // se actualiza la posicion
                     if (e2 > -dy) {
                         err -= dy;
                         x0 += sx;
